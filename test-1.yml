@@ -1,0 +1,29 @@
+config:
+  target: "https://postman-echo.com/"
+  phases:
+    - duration: 1
+      arrivalRate: 1
+      name: Artillery simple GET and POST Test
+scenarios:
+  - name: Getting a resource
+    flow:
+      - get:
+          url: "{{ target }}get"
+      - post:
+          url: "{{ target }}post"
+          json:
+            username: "Test User"
+            password: "Temp Password"
+          capture:
+            - json: "$.json"
+              as: "request_body"
+            - json: "$.headers.host"
+              as: "host"
+            - json: "$.headers.x-forwarded-port"
+              as: "forwardedPort"
+            - json: "$.headers.user-agent"
+              as: "userAgent"
+      - log: "Json value from response is: {{request_body}}"
+      - log: "Host value from response is: {{host}}"
+      - log: "X-forwarded-port value from response is: {{forwardedPort}}"
+      - log: "User-Agent value from response is: {{userAgent}}"
